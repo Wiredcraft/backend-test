@@ -10,7 +10,7 @@ const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.error(err.stack); // loga o erro no console
+  console.error(err.stack?.toString()); // loga o erro no console
 
   const statusCode = err.statusCode || 500; // define o status HTTP, padrão 500 (Erro interno)
   const message = err.message || "Internal Server Error";
