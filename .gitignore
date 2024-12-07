@@ -1,0 +1,8 @@
+# ignorando .env
+.env
+
+# igorando pasta de build
+dist/
+
+# ignorando node-modules
+node_modules/
