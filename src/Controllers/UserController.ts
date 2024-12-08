@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { show, update, destroy } from "../Models/User";
+import { show, update, destroy, findUserByEmail } from "../Models/User";
 import { CustomError } from "../Class/CustomError";
-import { schemaUserUpdate } from "../Services/schemasService";
+import { schemaUserUpdate, schemaPassUpdate } from "../Services/schemasService";
 import { ObjectId } from "mongodb";
+import bcrypt from "bcryptjs";
 
 // método para buscar todos os usuários
 export const getUsers = async (
@@ -99,6 +100,47 @@ export const deleteUser = async (
     }
 
     res.status(200).json({ message: "User deleted successfully" });
+  } catch (error: any) {
+    return next(error);
+  }
+};
+
+// função para alterar a senha de um usuário
+export const changePass = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  const { email, newPass } = req.body;
+
+  const validate = schemaPassUpdate.safeParse({ id, email, newPass });
+
+  if (!validate.success) {
+    const error = new Error("Data invalid, check and try again") as CustomError;
+    error.statusCode = 422;
+    error.message = "Dava invalids, check and try again";
+    return next(error);
+  }
+
+  try {
+    const user = await findUserByEmail(email);
+
+    if (!user) {
+      const error = new Error("User not found") as CustomError;
+      error.statusCode = 404;
+      error.message = "User not found";
+      return next(error);
+    }
+
+    // Aplicando hashing na nova senha
+    const newPassHashing = await bcrypt.hash(newPass, 10);
+
+    user.password = newPassHashing;
+
+    const userPassUpdated = await update(id, user);
+
+    res.status(200).json({ message: "Password changed successfully" });
   } catch (error: any) {
     return next(error);
   }

@@ -41,6 +41,19 @@ export const schemaUserUpdate = z.object({
   description: z.string().min(10),
 });
 
+// Schema para atualizar a senha do usuário
+export const schemaPassUpdate = z.object({
+  id: z.string(),
+  email: z.string().email(),
+  newPass: z
+    .string()
+    .min(8)
+    .regex(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/, {
+      message:
+        "Password must have at least 8 characters, 1 uppercase letter, 1 number and 1 special character",
+    }),
+});
+
 // Schema para verificar informações de login
 export const schemaLogin = z.object({
   email: z.string().email(),

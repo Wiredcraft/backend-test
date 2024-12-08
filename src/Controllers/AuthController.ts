@@ -60,9 +60,8 @@ export const createUser = async (
     // chamando a função store do Model e registrando o usuário
     const userCreated = await store(newUser);
     res.status(201).json({ message: "User created successfully", userCreated });
-    return;
   } catch (error: any) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -96,7 +95,7 @@ export const loginUser = async (
       const error = new Error("Credentials invalid") as CustomError;
       error.statusCode = 422;
       error.message = "Email or password incorrects!";
-      next(error);
+      return next(error);
     }
 
     const secret: string | undefined = process.env.SECRET;
@@ -105,7 +104,7 @@ export const loginUser = async (
     if (!secret) {
       const error = new Error("Internal Server Error") as CustomError;
       error.statusCode = 500;
-      next(error);
+      return next(error);
     }
 
     // gerando o token
@@ -114,7 +113,7 @@ export const loginUser = async (
     });
     res.status(200).json({ message: "User authenticated successfully", token });
   } catch (error: any) {
-    next(error);
+    return next(error);
   }
 };
 
