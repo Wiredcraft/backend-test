@@ -4,7 +4,7 @@ export default class User {
   _id?: ObjectId; // User ID
   name: string | null; // User Name
   email?: string | null; // User email
-  password: string; // User password
+  password?: string; // User password
   dob: Date | null; // Date of birth
   address: string | null; // User address
   description: string | null; // User description
