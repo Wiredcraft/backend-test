@@ -8,6 +8,8 @@ import { CustomError } from "../Class/CustomError";
 import jwt from "jsonwebtoken";
 import { blacklistToken } from "../Services/tokenService";
 import { Token } from "../Class/token";
+import { Profile } from "../Class/profile";
+import { createProfile } from "../Models/Profile";
 
 // método para criar um novo usuário
 export const createUser = async (
@@ -59,6 +61,15 @@ export const createUser = async (
 
     // chamando a função store do Model e registrando o usuário
     const userCreated = await store(newUser);
+
+    // criando o perfil do usuário passando o id dele e iniciando seguidores e seguindo com um array vazio
+    const profile: Profile = {
+      userId: userCreated.insertedId,
+      followers: [],
+      following: [],
+    };
+    await createProfile(profile);
+
     res.status(201).json({ message: "User created successfully", userCreated });
   } catch (error: any) {
     return next(error);
