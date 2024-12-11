@@ -1,4 +1,5 @@
 import z from "zod";
+import { Address } from "../Class/user";
 
 // Schema para validar os dados de entrada do usuário
 export const schemaUser = z.object({
@@ -20,7 +21,8 @@ export const schemaUser = z.object({
         "Password must have at least 8 characters, 1 uppercase letter, 1 number and 1 special character",
     }),
   dob: z.date().min(new Date("1900-01-01")),
-  address: z.string().min(8),
+  address: z.object({}),
+  location: z.object({}),
   description: z.string().min(10),
 });
 

@@ -6,7 +6,8 @@ export default class User {
   email?: string | null; // User email
   password?: string; // User password
   dob: Date | null; // Date of birth
-  address: string | null; // User address
+  address: Address; // User address
+  location: Location;
   description: string | null; // User description
   createdAt?: Date; // User created date
   updatedAt?: Date; // User updated date
@@ -16,7 +17,8 @@ export default class User {
     email: string,
     password: string,
     dob: Date,
-    address: string,
+    address: Address,
+    location: Location,
     description: string,
     createdAt: Date
   ) {
@@ -25,7 +27,19 @@ export default class User {
     this.password = password;
     this.dob = dob;
     this.address = address;
+    this.location = location;
     this.description = description;
     this.createdAt = createdAt;
   }
+}
+
+export interface Address {
+  street: string;
+  number: number;
+  city: string;
+}
+
+interface Location {
+  type: "Point";
+  coordinates: [number, number];
 }

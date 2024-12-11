@@ -1,8 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import { invite, showProfile, responseInvite } from "../Models/Profile";
+import {
+  invite,
+  showProfile,
+  responseInvite,
+  destroyProfile,
+  findLocation,
+} from "../Models/Profile";
 import { CustomError } from "../Class/CustomError";
 import { Follow } from "../Class/profile";
 import { ObjectId } from "mongodb";
+import { findUserById } from "../Models/User";
 
 // método para retornar o perfil de um usuário
 export const getProfile = async (
@@ -29,21 +36,21 @@ export const sendInvite = async (
 ) => {
   // user = usuário que irá receber o convite
   // userId = usuário que está mandando o convite
-  const { user, userId } = req.params;
+  const { receiverId, senderId } = req.params;
 
-  if (!user || !userId) {
+  if (!receiverId || !senderId) {
     throw new CustomError("User and UserID is required", 422);
   }
 
   try {
     // buscando o perfil do usuário que está enviando o convite
-    const profile = await showProfile(userId);
+    const profile = await showProfile(senderId);
     if (!profile) {
       throw new CustomError("Profile not found", 404);
     }
 
     // passando o id do usuário que vai receber o convite, e o perfil de quem enviou o convite
-    const inviteSend = await invite(user, profile);
+    const inviteSend = await invite(receiverId, profile);
     if (!inviteSend) {
       throw new CustomError("Error to send invite, try again later", 400);
     }
@@ -60,18 +67,18 @@ export const setInvite = async (
   res: Response,
   next: NextFunction
 ) => {
-  // user = id do usuário que recebeu o convite
-  const { user } = req.params;
+  // receiverId = id do usuário que recebeu o convite
+  const { receiverId } = req.params;
   // userId = id do usuário que enviou o convite
   const { userId, respost } = req.body;
 
-  if (!user) {
+  if (!receiverId) {
     throw new CustomError("UserId is required", 422);
   }
 
   try {
     // busco o perfil do usuário dono do perfil
-    const receiverProfile = await showProfile(user);
+    const receiverProfile = await showProfile(receiverId);
     const senderProfile = await showProfile(userId);
     if (!receiverProfile || !senderProfile) {
       throw new CustomError("Profile not found", 404);
@@ -101,7 +108,7 @@ export const setInvite = async (
 
       // atualizando os amigos do usuário que enviou o convite
       const receiverFriend: Follow = {
-        userId: new ObjectId(user),
+        userId: new ObjectId(receiverId),
         followDate: new Date(),
       };
       senderProfile.followers = [
@@ -115,11 +122,73 @@ export const setInvite = async (
       );
 
       // atualizando perfis no banco de dados
-      await responseInvite(user, receiverProfile);
+      await responseInvite(receiverId, receiverProfile);
       await responseInvite(userId, senderProfile);
     }
 
     res.status(200).json({ message: "Friend request successfully accepted" });
+  } catch (error: any) {
+    return next(error);
+  }
+};
+
+// método para excluir um perfil de usuário
+export const deleteProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    throw new CustomError("UserId is required", 422);
+  }
+
+  try {
+    const response = await destroyProfile(userId);
+
+    if (!response) {
+      throw new CustomError("Failed to delete user", 400);
+    }
+
+    res.status(200).json({ message: "User deleted successfully", response });
+  } catch (error: any) {
+    return next(error);
+  }
+};
+
+// método para buscar amigos próximos ao usuário
+export const findNearBy = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // userId do usuário que iniciou a busca
+  const { userId } = req.params;
+
+  try {
+    // buscando os dados do usuário para obter sua localização
+    const user = await findUserById(userId);
+    if (!user || !user.location) {
+      throw new CustomError("User or address not found", 404);
+    }
+
+    // buscando o perfil do usuários para obter seus seguidores
+    const profile = await showProfile(userId);
+    if (!profile || !profile.followers || profile.followers.length === 0) {
+      throw new CustomError("No followers found", 400);
+    }
+
+    // extraindo o id dos seus seguidores
+    const followersId = profile.followers.map(
+      (follower: any) => follower.userId
+    );
+
+    // passando usuário e os ids dos seguidores para função calcular a distância
+    const friendsNeayBy = await findLocation(user, followersId);
+
+    // retornando o resultado
+    res.status(200).json(friendsNeayBy);
   } catch (error: any) {
     return next(error);
   }

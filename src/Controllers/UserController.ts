@@ -93,10 +93,7 @@ export const deleteUser = async (
     const userCreated = await destroy(id);
     // se o retorno for null, quer dizer que o usuário não existia
     if (userCreated === null) {
-      const error = new Error("User not found") as CustomError;
-      error.statusCode = 404;
-      error.message = "User not found";
-      return next(error);
+      throw new CustomError("User not found", 404);
     }
 
     res.status(200).json({ message: "User deleted successfully" });

@@ -10,6 +10,15 @@ export const show = async () => {
   return result;
 };
 
+// função para buscar usuário pelo id
+export const findUserById = async (userId: string) => {
+  const db = await connectMongo();
+  const collection = db.collection<User>("users");
+  const objectId = new ObjectId(userId);
+  const result = await collection.findOne({ _id: objectId });
+  return result;
+};
+
 // função para buscar um usuário pelo email(para validações)
 export const findUserByEmail = async (email: string) => {
   const db = await connectMongo();
