@@ -47,6 +47,9 @@ export const sendInvite = async (
   }
 
   try {
+    if (receiverId === senderId) {
+      throw new CustomError("Can't sent an invitation to yourself", 400);
+    }
     // buscando o perfil do usuário que está enviando o convite
     const profile = await showProfile(senderId);
     if (!profile) {
@@ -96,7 +99,7 @@ export const setInvite = async (
       throw new CustomError("Users already friend", 400);
     }
 
-    console.log("Convites antes do filtro", receiverProfile);
+    //console.log("Convites antes do filtro", receiverProfile);
 
     if (respost === 1) {
       const newFriend: Follow = {
@@ -177,8 +180,11 @@ export const findNearBy = async (
       throw new CustomError("User or address not found", 404);
     }
 
+    console.log(user);
+
     // buscando o perfil do usuários para obter seus seguidores
     const profile = await showProfile(userId);
+    console.log(profile);
     if (!profile || !profile.followers || profile.followers.length === 0) {
       throw new CustomError("No followers found", 400);
     }
@@ -187,6 +193,8 @@ export const findNearBy = async (
     const followersId = profile.followers.map(
       (follower: any) => follower.userId
     );
+
+    console.log(followersId);
 
     // passando usuário e os ids dos seguidores para função calcular a distância
     const friendsNeayBy = await findLocation(user, followersId);

@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../../src/server";
 import { expect } from "@jest/globals";
-import { disconnectMongo } from "../../src/dbconfig/dbconfig";
+import { disconnectMongo, connectMongo } from "../../src/dbconfig/dbconfig";
 
 const user = {
   name: "Test jest",
@@ -107,5 +107,9 @@ describe("POST /auth/register", () => {
 });
 
 afterAll(async () => {
+  const db = await connectMongo();
+  await db.collection("users").deleteMany({});
+  await db.collection("profiles").deleteMany({});
+  await disconnectMongo();
   await disconnectMongo();
 });

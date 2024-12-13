@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../../src/server";
 import { expect } from "@jest/globals";
-import { disconnectMongo } from "../../src/dbconfig/dbconfig";
+import { disconnectMongo, connectMongo } from "../../src/dbconfig/dbconfig";
 import { userData, userData2, userData3, userData4 } from "../mocks/user";
 
 describe("Endpoints Users", () => {
@@ -85,5 +85,9 @@ describe("Endpoints Users", () => {
 });
 
 afterAll(async () => {
+  const db = await connectMongo();
+  await db.collection("users").deleteMany({});
+  await db.collection("profiles").deleteMany({});
+  await disconnectMongo();
   await disconnectMongo();
 });

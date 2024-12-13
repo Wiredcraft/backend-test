@@ -28,7 +28,7 @@ const user2 = {
   },
   location: {
     type: "Point",
-    coordinates: [-46.625454, -23.533394],
+    coordinates: [-46.624074, -24.532138], // 8km do user 1
   },
   description: "Test description",
 };
@@ -45,7 +45,7 @@ const user3 = {
   },
   location: {
     type: "Point",
-    coordinates: [-46.625454, -23.533394],
+    coordinates: [-46.624591, -24.532609], // 5km do user 1
   },
   description: "Test description",
 };
