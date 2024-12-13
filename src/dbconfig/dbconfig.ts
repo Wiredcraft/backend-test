@@ -1,4 +1,5 @@
 import { MongoClient, Db } from "mongodb";
+import "dotenv/config";
 
 let db: Db | null = null;
 let client: MongoClient | null = null;
@@ -21,5 +22,14 @@ export async function connectMongo(): Promise<Db> {
   } catch (error: unknown) {
     console.log(`Error connecting database ${error}`);
     throw new Error("Failed connect to database");
+  }
+}
+
+export async function disconnectMongo(): Promise<void> {
+  if (client) {
+    await client.close();
+    console.log("connection closed");
+    db = null;
+    client = null;
   }
 }

@@ -6,13 +6,14 @@
   "scripts": {
     "dev": "node --watch --env-file=.env dist/server.js",
     "build": "tsc --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --detectOpenHandles --verbose"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.11.0",

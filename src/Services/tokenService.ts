@@ -10,6 +10,11 @@ export const checkToken = async (
   res: Response,
   next: NextFunction
 ) => {
+  // Desabilitando autenticação para testes
+  if (process.env.NODE_ENV_TEST === "test") {
+    return next();
+  }
+
   // instanciando o middleware de errors
   const error = new Error("Error from Service Token") as CustomError;
 

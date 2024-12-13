@@ -12,7 +12,7 @@ export const schemaUser = z.object({
       message:
         "Name must be at least 8 characters and contain only letters and spaces",
     }),
-  email: z.string().email(),
+  email: z.string().email({ message: "Email is required" }),
   password: z
     .string()
     .min(6)

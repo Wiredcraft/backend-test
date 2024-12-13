@@ -14,9 +14,7 @@ export const getUsers = async (
   try {
     const users = await show();
     if (!users) {
-      const error = new Error("Users not found") as CustomError;
-      error.statusCode = 400;
-      return next(error);
+      throw new CustomError("Users not found", 400);
     }
 
     res.status(200).json(users);
@@ -67,10 +65,7 @@ export const updateUser = async (
     const userUpdated = await update(id, userUpdate);
 
     if (userUpdated === null) {
-      const error = new Error("User not found") as CustomError;
-      error.statusCode = 404;
-      error.message = "Failed, user not found";
-      return next(error);
+      throw new CustomError("Failed, user not found", 404);
     }
 
     res.status(200).json({ message: "User updated successfully", userUpdated });
@@ -114,20 +109,14 @@ export const changePass = async (
   const validate = schemaPassUpdate.safeParse({ id, email, newPass });
 
   if (!validate.success) {
-    const error = new Error("Data invalid, check and try again") as CustomError;
-    error.statusCode = 422;
-    error.message = "Dava invalids, check and try again";
-    return next(error);
+    throw new CustomError("Data invalids, check and try again");
   }
 
   try {
     const user = await findUserByEmail(email);
 
     if (!user) {
-      const error = new Error("User not found") as CustomError;
-      error.statusCode = 404;
-      error.message = "User not found";
-      return next(error);
+      throw new CustomError("User not found", 404);
     }
 
     // Aplicando hashing na nova senha

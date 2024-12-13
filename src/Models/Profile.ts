@@ -68,7 +68,7 @@ export const findLocation = async (user: User, followersIds: any[]) => {
         $geoNear: {
           near: {
             type: "Point",
-            coordinates: user.location.coordinates, // latitude e longitude
+            coordinates: user.location?.coordinates, // latitude e longitude
           },
           distanceField: "distance",
           maxDistance: MAX_DISTANCE_KM * 1000, // converte para metros

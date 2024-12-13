@@ -22,6 +22,10 @@ export const getProfile = async (
   try {
     const profile = await showProfile(userId);
 
+    if (profile === null) {
+      throw new CustomError("User profile not found", 404);
+    }
+
     res.status(200).json(profile);
   } catch (error: any) {
     return next(error);

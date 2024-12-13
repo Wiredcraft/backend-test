@@ -106,19 +106,14 @@ export const loginUser = async (
 
     // verificando se a senha passada confere com a senha grava no banco
     if (!bcrypt.compareSync(password, user.password as string)) {
-      const error = new Error("Credentials invalid") as CustomError;
-      error.statusCode = 422;
-      error.message = "Email or password incorrects!";
-      return next(error);
+      throw new CustomError("Email or Password invalid", 422);
     }
 
     const secret: string | undefined = process.env.SECRET;
 
     // verificando se o SECRET está presente antes de prosseguir
     if (!secret) {
-      const error = new Error("Internal Server Error") as CustomError;
-      error.statusCode = 500;
-      return next(error);
+      throw new CustomError("Internal Server Error", 500);
     }
 
     // gerando o token
@@ -142,10 +137,7 @@ export const logoutUser = async (
     const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
-      const error = new Error("Errors logout User") as CustomError;
-      error.statusCode = 401;
-      error.message = "Access denied, unauthorized";
-      return next(error);
+      throw new CustomError("Access denied, unauthorize", 401);
     }
 
     const newToken: Token = new Token(token, new Date());

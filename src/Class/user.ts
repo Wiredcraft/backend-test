@@ -7,7 +7,7 @@ export default class User {
   password?: string; // User password
   dob: Date | null; // Date of birth
   address: Address; // User address
-  location: Location;
+  location?: Location;
   description: string | null; // User description
   createdAt?: Date; // User created date
   updatedAt?: Date; // User updated date
