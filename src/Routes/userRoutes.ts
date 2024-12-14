@@ -8,8 +8,8 @@ import {
 import { checkToken } from "../Services/tokenService";
 
 export const userRoutes = (app: Application) => {
-  app.get("/index", checkToken, getUsers);
-  app.put("/update/:id", checkToken, updateUser);
-  app.put("/change/pass/:id", checkToken, changePass);
-  app.delete("/delete/:id", checkToken, deleteUser);
+  app.get("/api/index", checkToken, getUsers);
+  app.put("/api/update/:id", checkToken, updateUser);
+  app.put("/api/change/pass/:id", checkToken, changePass);
+  app.delete("/api/delete/:id", checkToken, deleteUser);
 };

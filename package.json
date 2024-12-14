@@ -4,8 +4,8 @@
   "description": "Backend of challenge wiredcraft",
   "main": "server.js",
   "scripts": {
-    "dev": "node --watch --env-file=.env dist/server.js",
-    "build": "tsc --watch",
+    "dev": "tsc && node dist/server.js",
+    "build": "tsc",
     "test": "jest --detectOpenHandles --verbose"
   },
   "keywords": [],
