@@ -47,8 +47,8 @@ describe("Endpoint /profile/nearby/userId", () => {
   });
   afterAll(async () => {
     const db = await connectMongo();
-    //await db.collection("users").deleteMany({});
-    //await db.collection("profiles").deleteMany({});
+    await db.collection("users").deleteMany({});
+    await db.collection("profiles").deleteMany({});
     await disconnectMongo();
   });
 });

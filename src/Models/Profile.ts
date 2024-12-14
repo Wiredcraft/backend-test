@@ -61,7 +61,7 @@ export const findLocation = async (user: User, followersIds: any[]) => {
   const db = await connectMongo();
   const usersCollection = db.collection<User>("users");
   const R = 6371; // Raio da Terra
-  const MAX_DISTANCE_KM = 1000; // distância máxima em KM
+  const MAX_DISTANCE_KM = 10; // distância máxima em KM
   const nearByFollowers = await usersCollection
     .aggregate([
       {

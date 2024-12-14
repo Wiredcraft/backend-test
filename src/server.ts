@@ -19,6 +19,8 @@ profileRoutes(app);
 // o middleware de erro deve vir após as rotas
 app.use(errorHandler);
 
+/*
 app.listen(3000, () => {
   console.log("Server is running on Port 3000");
 });
+*/
