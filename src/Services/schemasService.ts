@@ -21,8 +21,15 @@ export const schemaUser = z.object({
         "Password must have at least 8 characters, 1 uppercase letter, 1 number and 1 special character",
     }),
   dob: z.date().min(new Date("1900-01-01")),
-  address: z.object({}),
-  location: z.object({}),
+  address: z.object({
+    street: z.string().min(8),
+    number: z.number(),
+    city: z.string().min(3),
+  }),
+  location: z.object({
+    type: z.enum(["Point"]),
+    coordinates: z.array(z.number()),
+  }),
   description: z.string().min(10),
 });
 
@@ -39,7 +46,11 @@ export const schemaUserUpdate = z.object({
         "Name must be at least 8 characters and contain only letters and spaces",
     }),
   dob: z.date().min(new Date("1900-01-01")),
-  address: z.string().min(8),
+  address: z.object({
+    street: z.string().min(8),
+    number: z.number(),
+    city: z.string().min(3),
+  }),
   description: z.string().min(10),
 });
 

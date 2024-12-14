@@ -109,7 +109,7 @@ export const changePass = async (
   const validate = schemaPassUpdate.safeParse({ id, email, newPass });
 
   if (!validate.success) {
-    throw new CustomError("Data invalids, check and try again");
+    throw new CustomError("Data invalids, check and try again", 422);
   }
 
   try {

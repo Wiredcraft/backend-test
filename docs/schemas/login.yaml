@@ -1,0 +1,11 @@
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+        password:
+          type: string
+          description: User password

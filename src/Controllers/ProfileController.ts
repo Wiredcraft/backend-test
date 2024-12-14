@@ -43,7 +43,7 @@ export const sendInvite = async (
   const { receiverId, senderId } = req.params;
 
   if (!receiverId || !senderId) {
-    throw new CustomError("User and UserID is required", 422);
+    throw new CustomError("ReceiverId and SenderID is required", 422);
   }
 
   try {
@@ -80,7 +80,7 @@ export const setInvite = async (
   const { userId, respost } = req.body;
 
   if (!receiverId) {
-    throw new CustomError("UserId is required", 422);
+    throw new CustomError("ReceiverID is required", 422);
   }
 
   try {
@@ -96,7 +96,7 @@ export const setInvite = async (
     );
 
     if (userAlready) {
-      throw new CustomError("Users already friend", 400);
+      throw new CustomError("Users already friends", 400);
     }
 
     //console.log("Convites antes do filtro", receiverProfile);
@@ -158,7 +158,9 @@ export const deleteProfile = async (
       throw new CustomError("Failed to delete user", 400);
     }
 
-    res.status(200).json({ message: "User deleted successfully", response });
+    res
+      .status(200)
+      .json({ message: "User Profile deleted successfully", response });
   } catch (error: any) {
     return next(error);
   }

@@ -1,0 +1,192 @@
+paths:
+  /profile/{userId}:
+    get:
+      summary: "Return user profile"
+      description: "Must return profile of user logged"
+      tags:
+        - "Profile"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "User ID"
+      responses:
+        "200":
+          description: "Profile user"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Profile"
+        "401":
+          description: "Access denied, unauthorized"
+        "404":
+          description: "Profile not found"
+        "500":
+          description: "Internal Server Error"
+      security:
+        - bearerAuth: []
+  /profile/nearby/{userId}:
+    get:
+      summary: "Return friends nearby of user"
+      description: "Returns close friends to the user within a radius of up to 10 km"
+      tags:
+        - "Profile"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "User ID"
+      responses:
+        "200":
+          description: "A list of users nearby in a radius of 10km"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserWithDistance"
+        "400":
+          description: "No followers found"
+        "401":
+          description: "Access denied, unauthorized"
+        "404":
+          description: "User or address not found"
+        "500":
+          description: "Internal Server Error"
+      security:
+        - bearerAuth: []
+  /profile/{receiverId}/{senderId}:
+    post:
+      summary: "Send request of friendship"
+      description: "Must send a request of friendship for an user"
+      tags:
+        - "Profile"
+      parameters:
+        - name: "receiverId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "User that must receive an invite"
+        - name: "senderId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "User that sended an invite"
+      responses:
+        "200":
+          description: "Invite sended successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: "Invite sended successfully"
+        "400":
+          description: "Error to send invite, try again later"
+        "401":
+          description: "Access denied, unauthorized"
+        "404":
+          description: "Profile not found"
+        "422":
+          description: "ReceiverID and SenderID is required"
+        "500":
+          description: "Internal Server Error"
+      security:
+        - bearerAuth: []
+  /profile/{receiverId}:
+    post:
+      summary: "Accepting an invite of friendship"
+      description: "Must accept an invite of friendship"
+      tags:
+        - "Profile"
+      parameters:
+        - name: "receiverId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "Receiver ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: "User that sended an invite"
+                  example: "675dcd08dc92e3ee2bc87998"
+                respost:
+                  type: number
+                  example: 1
+      responses:
+        "200":
+          description: "Friend request successfully accepted"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: "Friend request successfully accepted"
+        "400":
+          description: "Users already friends"
+        "401":
+          description: "Access denied, unauthorized"
+        "404":
+          description: "Profile not found"
+        "422":
+          description: "ReceiverID is required"
+        "500":
+          description: "Internal Server Error"
+      security:
+        - bearerAuth: []
+  /profile/delete/{userId}:
+    delete:
+      summary: "Delete an User profile"
+      description: "Must delete an User profile from database"
+      tags:
+        - "Profile"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "User ID"
+      responses:
+        "200":
+          description: "User Profile deleted successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: "User deleted successfully"
+                  response:
+                    type: object
+                    description: "Informations of user deleted"
+        "400":
+          description: "Failed to delete user"
+        "401":
+          description: "Access denied, unauthorized"
+        "422":
+          description: "UserId is required"
+        "500":
+          description: "Internal Server Error"
+      security:
+        - bearerAuth: []

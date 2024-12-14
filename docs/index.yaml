@@ -1,0 +1,9 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: "http"
+      scheme: "Bearer"
+      bearerFormat: "JWT"
+servers:
+  - url: "http://localhost:3000"
+    description: "Development server"
