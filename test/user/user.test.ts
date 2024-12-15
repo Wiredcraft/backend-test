@@ -20,12 +20,20 @@ describe("Endpoints Users", () => {
     // capturando o id do user criado
     const userId = newUser.body.userCreated.insertedId;
 
-    const response = await request(app).put(`/update/${userId}`).send({
-      name: "Heryson Belkior",
-      dateBirth: "1999/01/02",
-      address: "Avenida Brasil 77",
-      description: "Usuário atualizado",
-    });
+    console.log(userId);
+
+    const response = await request(app)
+      .put(`/update/${userId}`)
+      .send({
+        name: "Heryson Belkior",
+        dateBirth: "1999/01/02",
+        address: {
+          street: "Avenida Brasil",
+          number: 77,
+          city: "São Paulo",
+        },
+        description: "Usuário atualizado",
+      });
 
     console.log("Update user: ", response.body);
 

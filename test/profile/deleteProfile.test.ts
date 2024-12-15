@@ -15,7 +15,7 @@ describe("Endpoin DELETE Profile", () => {
     console.log("Status:", response.status, "\n", response.body);
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toBe("User deleted successfully");
+    expect(response.body.message).toBe("User Profile deleted successfully");
   });
 
   it("Must return an error, user not found", async () => {

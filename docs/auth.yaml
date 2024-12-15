@@ -64,7 +64,7 @@ paths:
                   coordinates: [-22.27479245582508, -48.54846592041209]
                 description: "Software Developer, 25y, Single"
       responses:
-        "200":
+        "201":
           description: "User created successfully"
           content:
             application/json:
