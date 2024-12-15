@@ -6,3 +6,4 @@ dist/
 
 # ignorando node-modules
 node_modules/
+.vercel

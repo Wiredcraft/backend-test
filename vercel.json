@@ -3,19 +3,20 @@
   "builds": [
     {
       "src": "dist/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "dist/**",
+          "./node_modules/swagger-ui-dist/**",
+          "docs/*.yaml"
+        ]
+      }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
       "dest": "dist/server.js"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/api/docs"
     }
   ]
 }

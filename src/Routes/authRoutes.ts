@@ -7,7 +7,7 @@ import {
 import { checkToken } from "../Services/tokenService";
 
 export const authRoutes = (app: Application) => {
-  app.post("/api/auth/register", createUser);
-  app.post("/api/auth/login", loginUser);
-  app.post("/api/auth/logout", checkToken, logoutUser);
+  app.post("/auth/register", createUser);
+  app.post("/auth/login", loginUser);
+  app.post("/auth/logout", checkToken, logoutUser);
 };

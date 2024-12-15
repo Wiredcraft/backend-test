@@ -5,8 +5,16 @@ import { authRoutes } from "./Routes/authRoutes";
 import { profileRoutes } from "./Routes/profileRoutes";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
+import "dotenv";
+import path from "path";
+
+const CSS_URL =
+  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 
 export const app = express();
+const port = process.env.PORT || 3000;
+
+app.use(express.static("public"));
 app.use(express.json());
 
 // configurando o swagger
@@ -16,18 +24,46 @@ const optionsSwagger = {
     info: {
       title: "Wiredcraft API",
       version: "1.0.0",
-      description: "Api documentation",
+      description: "API documentation",
       contact: {
         name: "Heryson Andrade",
         email: "belkiorheryson@gmail.com",
       },
     },
+    servers: [
+      {
+        url: "https://backend-wiredcraft.vercel.app",
+        description: "Production server",
+      },
+    ],
   },
-  apis: ["./docs/*.yaml", "./docs/**/*.yaml"], // Caminho para os arquivos yaml
+  apis: [
+    path.join(__dirname, "../docs/*.yaml"),
+    path.join(__dirname, "../docs/**/*.yaml"),
+  ], // Caminho para os arquivos yaml
 };
 
 const specs = swaggerJSDoc(optionsSwagger);
-app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(specs));
+app.use(
+  "/api/docs",
+  swaggerUI.serve,
+  swaggerUI.setup(specs, {
+    swaggerOptions: {
+      url: "/docs/swagger.json",
+    },
+    customCssUrl: CSS_URL,
+  })
+);
+
+app.use("/docs", express.static(path.join(__dirname, "../docs")));
+
+app.get("/docs/swagger.json", (req, res) => {
+  res.json(specs);
+});
+
+app.get("/", (req, res) => {
+  res.redirect("/api/docs");
+});
 
 // endpoints
 userRoutes(app);
@@ -37,6 +73,8 @@ profileRoutes(app);
 // o middleware de erro deve vir após as rotas
 app.use(errorHandler);
 
-app.listen(3000, () => {
-  console.log("Server is running on Port 3000");
+app.listen(port, () => {
+  console.log(`Server is running on ${port}`);
 });
+
+module.exports = app;
