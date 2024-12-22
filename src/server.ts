@@ -7,16 +7,22 @@ import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 import "dotenv";
 import path from "path";
+import cors from "cors";
 
 const CSS_URL =
   "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 
 export const app = express();
 const port = process.env.PORT || 3000;
+app.use(
+  cors({
+    origin: "*", // aceita requisições de qualquer origem
+  })
+);
 
+// usando express.static para servir arquivos estáticos do swagger
 app.use(express.static("public"));
 app.use(express.json());
-
 // configurando o swagger
 const optionsSwagger = {
   definition: {
@@ -72,9 +78,9 @@ profileRoutes(app);
 
 // o middleware de erro deve vir após as rotas
 app.use(errorHandler);
-
+/*
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
-
+*/
 module.exports = app;

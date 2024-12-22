@@ -1,6 +1,6 @@
 import { connectMongo } from "../dbconfig/dbconfig";
 import { ObjectId } from "mongodb";
-import User from "../Class/user";
+import User, { Location } from "../Class/user";
 
 // função para buscar todos os usuário no database
 export const show = async () => {
@@ -45,6 +45,19 @@ export const update = async (id: string, user: User) => {
     { _id: objectId },
     { $set: user },
     { returnDocument: "after", projection: projection }
+  );
+  return result;
+};
+
+// função para salvar a localização de um usuário
+export const saveLocation = async (id: string, location: Location) => {
+  const db = await connectMongo();
+  const collection = db.collection<User>("users");
+  const objectId = new ObjectId(id);
+  //const projection = { password: 0 };
+  const result = await collection.updateOne(
+    { _id: objectId },
+    { $set: { location: location } }
   );
   return result;
 };

@@ -1,9 +1,17 @@
 import { Request, Response, NextFunction } from "express";
-import { show, update, destroy, findUserByEmail } from "../Models/User";
+import axios from "axios";
+import {
+  show,
+  update,
+  destroy,
+  findUserByEmail,
+  saveLocation,
+} from "../Models/User";
 import { CustomError } from "../Class/CustomError";
 import { schemaUserUpdate, schemaPassUpdate } from "../Services/schemasService";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
+import { Location } from "src/Class/user";
 
 // método para buscar todos os usuários
 export const getUsers = async (
@@ -129,5 +137,39 @@ export const changePass = async (
     res.status(200).json({ message: "Password changed successfully" });
   } catch (error: any) {
     return next(error);
+  }
+};
+
+// função para adicionar a localização de um usuário
+export const addLocation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  console.log(ip);
+
+  try {
+    if (ip === "::1" || ip === "127.0.0.1") {
+      ip = "8.8.8.8";
+    }
+    console.log(ip);
+    const response = await axios.get(`http://ip-api.com/json/${ip}`);
+
+    const location: Location = {
+      type: "Point",
+      coordinates: [response.data.lon, response.data.lat],
+    };
+
+    const userUpdated = await saveLocation(id, location);
+
+    if (!userUpdated) {
+      throw new CustomError("User not found or invalid address", 400);
+    }
+
+    res.status(200).json({ message: "User location update with success!" });
+  } catch (error) {
+    next(error);
   }
 };

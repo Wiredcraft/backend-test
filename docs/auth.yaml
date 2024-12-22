@@ -52,16 +52,13 @@ paths:
                 $ref: "#/components/schemas/Register"
               example:
                 name: "User Test"
-                email: "wiredcraf@gmail.com"
+                email: "wiredcraft@gmail.com"
                 password: "!Test12345"
                 dateBirth: "2000/05/04"
                 address:
                   street: "Avenue Principal"
-                  number: 1204
+                  number: "1204"
                   city: "Los Angeles"
-                location:
-                  type: "Point"
-                  coordinates: [-22.27479245582508, -48.54846592041209]
                 description: "Software Developer, 25y, Single"
       responses:
         "201":

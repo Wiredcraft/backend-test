@@ -23,12 +23,8 @@ export const schemaUser = z.object({
   dob: z.date().min(new Date("1900-01-01")),
   address: z.object({
     street: z.string().min(8),
-    number: z.number(),
+    number: z.string(),
     city: z.string().min(3),
-  }),
-  location: z.object({
-    type: z.enum(["Point"]),
-    coordinates: z.array(z.number()),
   }),
   description: z.string().min(10),
 });

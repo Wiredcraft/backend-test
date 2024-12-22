@@ -39,7 +39,7 @@ export interface Address {
   city: string;
 }
 
-interface Location {
+export interface Location {
   type: "Point";
   coordinates: [number, number];
 }

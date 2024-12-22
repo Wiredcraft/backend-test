@@ -77,10 +77,10 @@ paths:
           description: "Internal Server Error"
       security:
         - bearerAuth: []
-  /delete/{userId}:
-    delete:
-      summary: "Delete an user"
-      description: "Must delete an user from database"
+  /save-location/{userId}:
+    put:
+      summary: "Update location of user"
+      description: "Must update an user location in database"
       tags:
         - "User"
       parameters:
@@ -89,10 +89,10 @@ paths:
           required: true
           schema:
             type: string
-          description: "User ID"
+            description: "User ID"
       responses:
         "200":
-          description: "User deleted successfully"
+          description: "User location updated with success"
           content:
             application/json:
               schema:
@@ -100,13 +100,11 @@ paths:
                 properties:
                   message:
                     type: string
-                    description: "User deleted successfully"
+                    description: "User location updated with success"
+        "400":
+          description: "User not found or invalid address"
         "401":
           description: "Access denied, unauthorized"
-        "404":
-          description: "User not found"
-        "500":
-          description: "Internal Server Error"
       security:
         - bearerAuth: []
   /change/pass/{userId}:
@@ -152,6 +150,38 @@ paths:
           description: "User not found"
         "422":
           description: "Data invalids, check and try again"
+        "500":
+          description: "Internal Server Error"
+      security:
+        - bearerAuth: []
+  /delete/{userId}:
+    delete:
+      summary: "Delete an user"
+      description: "Must delete an user from database"
+      tags:
+        - "User"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "User ID"
+      responses:
+        "200":
+          description: "User deleted successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: "User deleted successfully"
+        "401":
+          description: "Access denied, unauthorized"
+        "404":
+          description: "User not found"
         "500":
           description: "Internal Server Error"
       security:

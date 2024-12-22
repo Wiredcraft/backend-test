@@ -17,8 +17,7 @@ export const createUser = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const { name, email, password, dateBirth, address, location, description } =
-    req.body;
+  const { name, email, password, dateBirth, address, description } = req.body;
 
   // convertendo a string recebida para data antes de passar pela validação
   const dob = new Date(dateBirth);
@@ -30,7 +29,6 @@ export const createUser = async (
     password,
     dob,
     address,
-    location,
     description,
   });
 
@@ -57,7 +55,6 @@ export const createUser = async (
       password: passwordHashing,
       dob,
       address,
-      location,
       description,
       createdAt: new Date(),
     };
