@@ -1,0 +1,68 @@
+components:
+  schemas:
+    Profile:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: "Unique identifier for the profile"
+          example: "675dcd08dc92e3ee2bc87999"
+        userId:
+          type: string
+          description: "The unique identifier of the user associated with the profile"
+          example: "675dcd08dc92e3ee2bc87998"
+        followers:
+          type: array
+          description: "List of user IDs following this profile"
+          items:
+            type: string
+          example: []
+        following:
+          type: array
+          description: "List of user IDs this profile is following"
+          items:
+            type: string
+          example: []
+        invites:
+          type: array
+          description: "List of invites friendship that user have"
+          items:
+            type: string
+          example: []
+    UserWithDistance:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: "Unique identifier for the user"
+          example: "675dd4732c101d1d1c72177a"
+        name:
+          type: string
+          description: "Name of the user"
+          example: "User Test"
+        email:
+          type: string
+          description: "Email of the user"
+          format: email
+          example: "wiredcraf@gmail.com"
+        address:
+          type: object
+          description: "Address of the user"
+          properties:
+            street:
+              type: string
+              description: "Street name"
+              example: "Avenue Principal"
+            number:
+              type: integer
+              description: "House number"
+              example: 1204
+            city:
+              type: string
+              description: "City name"
+              example: "Los Angeles"
+        distance:
+          type: number
+          format: float
+          description: "Distance from the user in meters"
+          example: 200.12

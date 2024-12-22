@@ -1,0 +1,21 @@
+definition:
+  openapi: 3.0.0
+  info:
+    title: Wiredcraft API node.js
+    version: 1.0.0
+  paths:
+    /user:
+      $ref: "./user.yaml"
+    /auth:
+      $ref: "./auth.yaml"
+    /profile:
+      $ref: "./profile.yaml"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: "http"
+      scheme: "Bearer"
+      bearerFormat: "JWT"
+servers:
+  - url: "http://localhost:3000"
+    description: "Development server"

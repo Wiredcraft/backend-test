@@ -1,0 +1,70 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+          description: "Identificador único do usuário (MongoDB ObjectId)."
+          example: "675db56f84deb000d9e86187"
+        name:
+          type: string
+          description: "Nome do usuário."
+          example: "José Ailton"
+        email:
+          type: string
+          format: email
+          description: "Email do usuário."
+          example: "jose2@gmail.com"
+        password:
+          type: string
+          description: "Senha criptografada do usuário."
+          example: "$2a$10$e4WCqN./n/UOIit3qeZnjOnP43NZ7oJU5mcwH9.w9aE6tz/EHEwRO"
+        dob:
+          type: string
+          format: date-time
+          description: "Data de nascimento do usuário."
+          example: "1999-09-14T03:00:00.000Z"
+        address:
+          type: object
+          description: "Endereço do usuário."
+          properties:
+            street:
+              type: string
+              description: "Nome da rua."
+              example: "Avenida Brasil"
+            number:
+              type: integer
+              description: "Número da casa ou apartamento."
+              example: 24
+            city:
+              type: string
+              description: "Cidade do endereço."
+              example: "Rio de Janeiro"
+        location:
+          type: object
+          description: "Localização geográfica do usuário."
+          properties:
+            type:
+              type: string
+              enum: ["Point"]
+              description: "Tipo da localização (fixo como 'Point')."
+              example: "Point"
+            coordinates:
+              type: array
+              items:
+                type: number
+              minItems: 2
+              maxItems: 2
+              description: "Coordenadas no formato [longitude, latitude]."
+              example: [-46.625454, -23.533394]
+        description:
+          type: string
+          description: "Descrição do usuário."
+          example: "Programador, 25 anos"
+        createdAt:
+          type: string
+          format: date-time
+          description: "Data de criação do usuário."
+          example: "2024-12-14T16:42:23.028Z"

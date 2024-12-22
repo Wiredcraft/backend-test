@@ -1,0 +1,111 @@
+paths:
+  /auth/login:
+    post:
+      summary: "Login an user"
+      description: "Verify user credentials and to make login"
+      tags:
+        - "Auth"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                $ref: "#/components/schemas/Login"
+            example:
+              email: "wiredcraft@gmail.com"
+              password: "!Test12345"
+      responses:
+        "200":
+          description: "User authenticated successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: "User authenticated successfully"
+                  token:
+                    type: string
+                    description: "JWT token"
+        "404":
+          description: "User not found"
+        "422":
+          description: "Invalids data"
+        "500":
+          description: "Internal Server Error"
+  /auth/register:
+    post:
+      summary: "Register an user"
+      description: "Register a new user"
+      tags:
+        - "Auth"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                $ref: "#/components/schemas/Register"
+              example:
+                name: "User Test"
+                email: "wiredcraft@gmail.com"
+                password: "!Test12345"
+                dateBirth: "2000/05/04"
+                address:
+                  street: "Avenue Principal"
+                  number: "1204"
+                  city: "Los Angeles"
+                description: "Software Developer, 25y, Single"
+      responses:
+        "201":
+          description: "User created successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: "User created successfully"
+                  userCreated:
+                    type: object
+                    properties:
+                      acknowledged:
+                        type: boolean
+                        description: "true"
+                      insertedId:
+                        type: string
+                        description: "675db56f84deb000d9e86187"
+        "400":
+          description: "Email is not available"
+        "422":
+          description: "Invalids data"
+        "500":
+          description: "Internal Server Error"
+  /auth/logout:
+    post:
+      summary: "Logout an user"
+      description: "Must logout an user and invalid a token"
+      tags:
+        - "Auth"
+      responses:
+        "200":
+          description: "User logged out successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: "User logged out successfully"
+        "401":
+          description: "Access denied, unauthorize"
+        "500":
+          description: "Internal Server Error"
+      security:
+        - bearerAuth: []

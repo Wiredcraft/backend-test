@@ -1,0 +1,46 @@
+components:
+  schemas:
+    Register:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "User name"
+        email:
+          type: string
+          description: "User email"
+        password:
+          type: string
+          description: "User password"
+        dob:
+          type: date
+          description: "Date of birth"
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+              description: "Street of user"
+            number:
+              type: number
+              description: "Number of house"
+            city:
+              type: string
+              description: "City of user"
+        location:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: ["Point"] # Se "Point" é o único valor válido, use enum
+              description: "O tipo de geometria. Atualmente apenas 'Point' é suportado."
+            coordinates:
+              type: array
+              items: # Define os itens dentro do array
+                type: number
+              minItems: 2 # Exige que o array tenha exatamente 2 valores
+              maxItems: 2
+              description: "As coordenadas no formato [longitude, latitude]."
+        description:
+          type: string
+          description: "Description of user"

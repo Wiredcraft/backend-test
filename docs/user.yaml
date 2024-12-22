@@ -1,0 +1,188 @@
+paths:
+  /index:
+    get:
+      summary: "Return all of users"
+      description: "Return a list all of users"
+      tags:
+        - "User"
+      responses:
+        "200":
+          description: "A list all of users"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        "400":
+          description: "Users not found"
+        "401":
+          description: "Access denied, unauthorized"
+        "500":
+          description: "Internal Server Error"
+      security:
+        - bearerAuth: []
+  /update/{userId}:
+    put:
+      summary: "Update common information of a user"
+      description: "Updates the user's information in the database"
+      tags:
+        - "User"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "User ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "New Username"
+                dateBirth:
+                  type: string
+                  format: date
+                  example: "2000-05-20"
+                address:
+                  type: object
+                  properties:
+                    street:
+                      type: string
+                      example: "Avenue two lake"
+                    number:
+                      type: integer
+                      example: 405
+                    city:
+                      type: string
+                      example: "Cleveland"
+                description:
+                  type: string
+                  example: "New description for user"
+      responses:
+        "200":
+          description: "User updated successfully"
+        "401":
+          description: "Access denied, unauthorized"
+        "404":
+          description: "User not found"
+        "422":
+          description: "Invalids data"
+        "500":
+          description: "Internal Server Error"
+      security:
+        - bearerAuth: []
+  /save-location/{userId}:
+    put:
+      summary: "Update location of user"
+      description: "Must update an user location in database"
+      tags:
+        - "User"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+            description: "User ID"
+      responses:
+        "200":
+          description: "User location updated with success"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: "User location updated with success"
+        "400":
+          description: "User not found or invalid address"
+        "401":
+          description: "Access denied, unauthorized"
+      security:
+        - bearerAuth: []
+  /change/pass/{userId}:
+    put:
+      summary: "Change password of user"
+      description: "Must change password of user from database"
+      tags:
+        - "User"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "User ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "wiredcraft@gmail.com"
+                newPass:
+                  type: string
+                  example: "!NewPass1234"
+      responses:
+        "200":
+          description: "Password changed successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: "Password changed successfully"
+        "401":
+          description: "Access denied, unauthorized"
+        "404":
+          description: "User not found"
+        "422":
+          description: "Data invalids, check and try again"
+        "500":
+          description: "Internal Server Error"
+      security:
+        - bearerAuth: []
+  /delete/{userId}:
+    delete:
+      summary: "Delete an user"
+      description: "Must delete an user from database"
+      tags:
+        - "User"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "User ID"
+      responses:
+        "200":
+          description: "User deleted successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: "User deleted successfully"
+        "401":
+          description: "Access denied, unauthorized"
+        "404":
+          description: "User not found"
+        "500":
+          description: "Internal Server Error"
+      security:
+        - bearerAuth: []
